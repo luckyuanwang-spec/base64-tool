@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Online Base64 Encoder & Decoder - Instant Text & File Conversion</title>
+    <meta name="description" content="Free online Base64 encoder and decoder. Convert text, images, or files to/from Base64 instantly. No signup required, works in your browser.">
+    <meta name="keywords" content="base64 encoder, base64 decoder, base64 converter, encode base64, decode base64, base64 online">
+    <meta name="robots" content="index, follow">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            color: white;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .lang-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.15);
+            border: 2px solid white;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        
+        .lang-toggle:hover {
+            background: white;
+            color: #302b63;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        
+        .card h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .mode-toggle {
+            display: flex;
+            background: #f0f0f0;
+            border-radius: 30px;
+            padding: 5px;
+            margin-bottom: 25px;
+        }
+        
+        .mode-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            background: transparent;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #666;
+            transition: all 0.3s;
+        }
+        
+        .mode-btn.active {
+            background: #302b63;
+            color: white;
+            box-shadow: 0 4px 15px rgba(48, 43, 99, 0.4);
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: 'Courier New', monospace;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #302b63;
+        }
+        
+        .result-box {
+            background: #f8f9fa;
+            border: 2px dashed #302b63;
+            border-radius: 12px;
+            padding: 20px;
+            min-height: 150px;
+        }
+        
+        .result-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .action-btn {
+            background: #302b63;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .action-btn:hover {
+            background: #1a1833;
+            transform: translateY(-2px);
+        }
+        
+        .action-btn.copied {
+            background: #10b981;
+        }
+        
+        .action-btn.clear {
+            background: #6b7280;
+        }
+        
+        .action-btn.clear:hover {
+            background: #4b5563;
+        }
+        
+        .info-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .info-box h3 {
+            margin-bottom: 15px;
+        }
+        
+        .info-box ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .info-box li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .info-box li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+        
+        .examples {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+        }
+        
+        .examples h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .example-item {
+            padding: 12px 0;
+            border-bottom: 1px solid #e0e0e0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+        
+        .example-item:last-child {
+            border-bottom: none;
+        }
+        
+        .example-label {
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .example-value {
+            color: #302b63;
+            word-break: break-all;
+        }
+        
+        .faq-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+        
+        .faq-item {
+            border-bottom: 1px solid #e0e0e0;
+            padding: 15px 0;
+        }
+        
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+        
+        .faq-question {
+            color: #333;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .faq-question::after {
+            content: "+";
+            font-size: 1.5rem;
+            color: #302b63;
+            transition: transform 0.3s;
+        }
+        
+        .faq-item.open .faq-question::after {
+            transform: rotate(45deg);
+        }
+        
+        .faq-answer {
+            color: #666;
+            margin-top: 10px;
+            line-height: 1.6;
+            display: none;
+        }
+        
+        .faq-item.open .faq-answer {
+            display: block;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: white;
+        }
+        
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .mode-toggle {
+                flex-direction: column;
+            }
+            
+            .mode-btn {
+                width: 100%;
+            }
+            
+            .result-actions {
+                flex-direction: column;
+            }
+            
+            .action-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="lang-toggle" onclick="toggleLanguage()">中文</button>
+    
+    <div class="container">
+        <header>
+            <h1 data-en="Free Online Base64 Encoder & Decoder" data-zh="免费在线 Base64 编码器 & 解码器">Free Online Base64 Encoder & Decoder</h1>
+            <p class="subtitle" data-en="Convert text, images, or data to/from Base64 instantly" data-zh="即时转换文本、图片或数据为 Base64 格式">Convert text, images, or data to/from Base64 instantly</p>
+        </header>
+        
+        <div class="card">
+            <div class="mode-toggle">
+                <button class="mode-btn active" id="encodeMode" onclick="setMode('encode')" data-en="Encode" data-zh="编码">Encode</button>
+                <button class="mode-btn" id="decodeMode" onclick="setMode('decode')" data-en="Decode" data-zh="解码">Decode</button>
+            </div>
+            
+            <div class="input-group" id="encodeInputGroup">
+                <label data-en="Enter text to encode:" data-zh="输入要编码的文本：">Enter text to encode:</label>
+                <textarea id="inputText" placeholder="Enter your text here..." placeholder-en="Enter your text here..." placeholder-zh="在这里输入文本..."></textarea>
+            </div>
+            
+            <div class="input-group" id="decodeInputGroup" style="display: none;">
+                <label data-en="Enter Base64 to decode:" data-zh="输入要解码的 Base64：">Enter Base64 to decode:</label>
+                <textarea id="inputBase64" placeholder="Enter Base64 string here..." placeholder-en="Enter Base64 string here..." placeholder-zh="在这里输入 Base64 字符串..."></textarea>
+            </div>
+            
+            <div class="input-group" id="decodeResultGroup" style="display: none;">
+                <label data-en="Decoded text:" data-zh="解码后的文本：">Decoded text:</label>
+                <textarea id="decodedText" readonly style="background: #f0f0f0;"></textarea>
+            </div>
+        </div>
+        
+        <div class="card" id="encodeResultCard">
+            <h2 data-en="Base64 Output" data-zh="Base64 输出">Base64 Output</h2>
+            <div class="result-box">
+                <span id="result" style="font-family: 'Courier New', monospace; word-break: break-all;"></span>
+            </div>
+            <div class="result-actions">
+                <button class="action-btn" id="copyBtn" onclick="copyToClipboard()" data-en="Copy Result" data-zh="复制结果">Copy Result</button>
+                <button class="action-btn clear" onclick="clearAll()" data-en="Clear All" data-zh="清空">Clear All</button>
+            </div>
+        </div>
+        
+        <div class="card info-box">
+            <h3 data-en="💡 What is Base64?" data-zh="💡 什么是 Base64？">💡 What is Base64?</h3>
+            <ul>
+                <li data-en="Base64 is an encoding scheme that converts binary data into ASCII text format" data-zh="Base64 是一种将二进制数据转换为 ASCII 文本格式的编码方案">Base64 is an encoding scheme that converts binary data into ASCII text format</li>
+                <li data-en="Commonly used to embed images in HTML/CSS, transmit data via JSON, or encode credentials" data-zh="常用于在 HTML/CSS 中嵌入图片、通过 JSON 传输数据或编码凭证">Commonly used to embed images in HTML/CSS, transmit data via JSON, or encode credentials</li>
+                <li data-en="Works entirely in your browser - no data is sent to any server" data-zh="完全在您的浏览器中运行 - 不会将数据发送到任何服务器">Works entirely in your browser - no data is sent to any server</li>
+                <li data-en="Safe and secure - your data never leaves your device" data-zh="安全可靠 - 您的数据永远不会离开您的设备">Safe and secure - your data never leaves your device</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <div class="examples">
+                <h3 data-en="📝 Quick Examples" data-zh="📝 快速示例">📝 Quick Examples</h3>
+                <div class="example-item">
+                    <div class="example-label">Hello World →</div>
+                    <div class="example-value">SGVsbG8gV29ybGQh</div>
+                </div>
+                <div class="example-item">
+                    <div class="example-label">https://example.com →</div>
+                    <div class="example-value">aHR0cHM6Ly9leGFtcGxlLmNvbQ==</div>
+                </div>
+                <div class="example-item">
+                    <div class="example-label">1234567890 →</div>
+                    <div class="example-value">MTIzNDU2Nzg5MA==</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card faq-section">
+            <h2 data-en="Frequently Asked Questions" data-zh="常见问题">Frequently Asked Questions</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question" data-en="What is Base64 encoding used for?" data-zh="Base64 编码有什么用？">What is Base64 encoding used for?</div>
+                <div class="faq-answer" data-en="Base64 is commonly used to encode binary data (like images or files) into ASCII text format for transmission over text-based protocols, embedding in HTML/CSS, storing in databases, or encoding API credentials." data-zh="Base64 通常用于将二进制数据（如图片或文件）编码为 ASCII 文本格式，以便通过基于文本的协议传输、在 HTML/CSS 中嵌入、存储在数据库中或编码 API 凭证。">Base64 is commonly used to encode binary data for transmission over text-based protocols.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question" data-en="Is Base64 encryption?" data-zh="Base64 是加密吗？">Is Base64 encryption?</div>
+                <div class="faq-answer" data-en="No, Base64 is NOT encryption. It's simply an encoding scheme that can be easily decoded. Anyone can reverse Base64 to get the original data. For security, use proper encryption methods instead." data-zh="不是，Base64 不是加密。它只是一个可以轻松解码的编码方案。任何人都可以反向 Base64 获取原始数据。如需安全，请使用适当的加密方法。">No, Base64 is NOT encryption. It's simply an encoding scheme that can be easily decoded.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question" data-en="Does Base64 increase file size?" data-zh="Base64 会增加文件大小吗？">Does Base64 increase file size?</div>
+                <div class="faq-answer" data-en="Yes, Base64 encoding increases file size by approximately 33%. Each 3 bytes of binary data become 4 bytes in Base64, plus padding characters." data-zh="是的，Base64 编码会使文件大小增加约 33%。每 3 字节的二进制数据变成 Base64 中的 4 字节，加上填充字符。">Yes, Base64 encoding increases file size by approximately 33%.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question" data-en="Is my data secure?" data-zh="我的数据安全吗？">Is my data secure?</div>
+                <div class="faq-answer" data-en="Your data is processed entirely in your browser. Nothing is sent to any server. However, anyone who can see your screen can see the encoded/decoded data, so use caution when handling sensitive information." data-zh="您的数据完全在浏览器中处理。不会发送到任何服务器。但是，任何能看到您屏幕的人都能看到编码/解码的数据，因此在处理敏感信息时请谨慎。">Your data is processed entirely in your browser. Nothing is sent to any server.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question" data-en="Can I encode images with Base64?" data-zh="我可以用 Base64 编码图片吗？">Can I encode images with Base64?</div>
+                <div class="faq-answer" data-en="Yes, you can encode images to Base64 for embedding directly in HTML img tags or CSS backgrounds. The format would be: data:image/png;base64,{encoded_data}" data-zh="是的，您可以编码图片为 Base64 以便直接嵌入 HTML img 标签或 CSS 背景。格式为：data:image/png;base64,{编码数据}">Yes, you can encode images to Base64 for embedding directly in HTML or CSS.</div>
+            </div>
+        </div>
+        
+        <footer>
+            <p data-en="Free Base64 Encoder & Decoder • 100% Browser-Based • No Data Sent" data-zh="免费 Base64 编码器 & 解码器 • 100% 基于浏览器 • 不发送任何数据">Free Base64 Encoder & Decoder • 100% Browser-Based • No Data Sent</p>
+        </footer>
+    </div>
+    
+    <script>
+        let currentMode = 'encode';
+        let currentLang = 'en';
+        
+        function setMode(mode) {
+            currentMode = mode;
+            const encodeBtn = document.getElementById('encodeMode');
+            const decodeBtn = document.getElementById('decodeMode');
+            
+            if (mode === 'encode') {
+                encodeBtn.classList.add('active');
+                decodeBtn.classList.remove('active');
+                document.getElementById('encodeInputGroup').style.display = 'block';
+                document.getElementById('decodeInputGroup').style.display = 'none';
+                document.getElementById('decodeResultGroup').style.display = 'none';
+                document.getElementById('encodeResultCard').style.display = 'block';
+            } else {
+                decodeBtn.classList.add('active');
+                encodeBtn.classList.remove('active');
+                document.getElementById('encodeInputGroup').style.display = 'none';
+                document.getElementById('decodeInputGroup').style.display = 'block';
+                document.getElementById('decodeResultGroup').style.display = 'block';
+                document.getElementById('encodeResultCard').style.display = 'none';
+            }
+        }
+        
+        function processInput() {
+            if (currentMode === 'encode') {
+                const input = document.getElementById('inputText').value;
+                if (input.trim()) {
+                    try {
+                        const encoded = btoa(unescape(encodeURIComponent(input)));
+                        document.getElementById('result').textContent = encoded;
+                    } catch (e) {
+                        document.getElementById('result').textContent = currentLang === 'en' ? 'Error: Invalid input' : '错误：无效输入';
+                    }
+                } else {
+                    document.getElementById('result').textContent = '';
+                }
+            } else {
+                const input = document.getElementById('inputBase64').value;
+                if (input.trim()) {
+                    try {
+                        const decoded = decodeURIComponent(escape(atob(input.trim())));
+                        document.getElementById('decodedText').value = decoded;
+                    } catch (e) {
+                        document.getElementById('decodedText').value = currentLang === 'en' ? 'Error: Invalid Base64 string' : '错误：无效的 Base64 字符串';
+                    }
+                } else {
+                    document.getElementById('decodedText').value = '';
+                }
+            }
+        }
+        
+        function copyToClipboard() {
+            const result = document.getElementById('result').textContent;
+            if (result) {
+                navigator.clipboard.writeText(result).then(() => {
+                    const btn = document.getElementById('copyBtn');
+                    btn.textContent = currentLang === 'en' ? 'Copied!' : '已复制!';
+                    btn.classList.add('copied');
+                    setTimeout(() => {
+                        btn.textContent = currentLang === 'en' ? 'Copy Result' : '复制结果';
+                        btn.classList.remove('copied');
+                    }, 2000);
+                });
+            }
+        }
+        
+        function clearAll() {
+            if (currentMode === 'encode') {
+                document.getElementById('inputText').value = '';
+                document.getElementById('result').textContent = '';
+            } else {
+                document.getElementById('inputBase64').value = '';
+                document.getElementById('decodedText').value = '';
+            }
+        }
+        
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'zh' : 'en';
+            
+            document.querySelectorAll('[data-' + (currentLang === 'en' ? 'zh' : 'en') + ']').forEach(el => {
+                const text = el.getAttribute('data-' + currentLang);
+                if (text) el.textContent = text;
+            });
+            
+            document.querySelectorAll('[placeholder-' + (currentLang === 'en' ? 'zh' : 'en') + ']').forEach(el => {
+                el.placeholder = el.getAttribute('placeholder-' + currentLang);
+            });
+            
+            document.querySelector('.lang-toggle').textContent = currentLang === 'en' ? '中文' : 'EN';
+            processInput();
+        }
+        
+        document.querySelectorAll('.faq-question').forEach(q => q.addEventListener('click', () => q.parentElement.classList.toggle('open')));
+        document.getElementById('inputText').addEventListener('input', processInput);
+        document.getElementById('inputBase64').addEventListener('input', processInput);
+    </script>
+</body>
+</html>
